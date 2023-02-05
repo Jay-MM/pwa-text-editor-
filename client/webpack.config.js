@@ -2,6 +2,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 // TODO: Add CSS loaders and babel to webpack.
@@ -18,8 +20,15 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'style.min.css'
+      }),
       new HtmlWebpackPlugin({
         template: './index.html',
+      }),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'service-worker.js',
       }),
       new WebpackPwaManifest({
         name: 'JATE',
@@ -27,6 +36,7 @@ module.exports = () => {
         description: 'Just Another Test Editor',
         display: 'standalone',
         background_color: '#00a0de',
+        theme_color:'#00a0de',
         start_url: '/',
         publicPath: '/',
         fingerprints: false,
@@ -38,14 +48,14 @@ module.exports = () => {
             destination: path.join('assets', 'icons')
           }
         ]
-      })
+      }),
     ],
 
     module: {
       rules: [
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader']
+          use: [MiniCssExtractPlugin.loader, 'css-loader']
         },
         {
           test:/\,m?js$/,
@@ -59,6 +69,15 @@ module.exports = () => {
           }
         } 
       ],
+    },
+    optimization: {
+      minimizer: [
+        new CssMinimizerWebpackPlugin()
+      ]
+    },
+    devServer: {
+      static: __dirname,
+      hot: true
     },
   };
 };
