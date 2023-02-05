@@ -20,34 +20,32 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'style.min.css'
-      }),
       new HtmlWebpackPlugin({
         template: './index.html',
+        title: 'Text Editor'
       }),
+      new MiniCssExtractPlugin(),
       new InjectManifest({
         swSrc: './src-sw.js',
-        swDest: 'service-worker.js',
+        swDest: 'src-sw.js',
       }),
       new WebpackPwaManifest({
-        name: 'JATE',
-        short_name: 'JATE',
-        description: 'Just Another Test Editor',
-        display: 'standalone',
-        background_color: '#00a0de',
-        theme_color:'#00a0de',
-        start_url: '/',
-        publicPath: '/',
         fingerprints: false,
         inject: true,
+        name: 'Text Editor',
+        short_name: 'Editor',
+        description: 'Just Another Text Editor!',
+        background_color: '#225ca3',
+        theme_color: '#225ca3',
+        start_url: '/',
+        publicPath: '/',
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
-            destination: path.join('assets', 'icons')
-          }
-        ]
+            destination: path.join('assets', 'icons'),
+          },
+        ],
       }),
     ],
 
@@ -55,29 +53,26 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/i,
-          use: [MiniCssExtractPlugin.loader, 'css-loader']
+          use: ['style-loader', 'css-loader'],
         },
         {
-          test:/\,m?js$/,
-          exclude:/node_modules/,
+          test: /\.m?js$/,
+          exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime']
-            }
-          }
-        } 
+              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
+            },
+          },
+        },
+
       ],
     },
     optimization: {
       minimizer: [
         new CssMinimizerWebpackPlugin()
       ]
-    },
-    devServer: {
-      static: __dirname,
-      hot: true
     },
   };
 };
