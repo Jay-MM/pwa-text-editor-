@@ -27,7 +27,8 @@
   [Click Here to use this app in a live site!](https://evening-spire-25471.herokuapp.com/)
   <br>
   Use this text editor like any other text editor 
-  ![JATE screenshot](https://file%2B.vscode-resource.vscode-cdn.net/c%3A/Users/gemii/Desktop/projects/cautious-meme/assets/jate%20ss.png?version%3D1675750619988)
+  <br>
+  ![JATE screenshot](assets/jate%20ss.png)
   
   
   ## [Credits](#table-of-contents)
